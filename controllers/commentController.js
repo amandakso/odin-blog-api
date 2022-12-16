@@ -1,10 +1,10 @@
 const Comment = require("../models/comment");
 
 exports.get_comments = (req, res) => {
-  return res.send("TBD get all comments");
+  return res.render("TBD get all comments");
 };
 exports.get_a_comment = (req, res) => {
-  return res.send("TBD get one comment");
+  return res.render("TBD get one comment");
 };
 exports.create_comment = (req, res) => {
   return res.send("TBD create new comment");
