@@ -6,19 +6,6 @@ const user_controller = require("../controllers/userController");
 const post_controller = require("../controllers/postController");
 const comment_controller = require("../controllers/commentController");
 
-// Require controller modules
-
-// User Routes //
-
-// Create new user
-router.post("/sign-up", user_controller.signup);
-
-// Login user
-router.post("/login", user_controller.login);
-
-// Logout user
-router.post("/logout", user_controller.logout);
-
 // Post Routes //
 
 // get posts
@@ -61,3 +48,16 @@ router.delete(
   "/posts/:postid/comments/:commentid",
   comment_controller.delete_comment
 );
+
+// User Routes //
+
+// Create new user
+router.post("/sign-up", user_controller.signup);
+
+// Login user
+router.post("/login", user_controller.login);
+
+// Logout user
+router.post("/logout", user_controller.logout);
+
+module.exports = router;
