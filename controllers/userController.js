@@ -82,7 +82,6 @@ exports.signup = [
 exports.login = async (req, res, next) => {
   //Get user
   passport.authenticate("login", async (err, user) => {
-    console.log(user);
     try {
       if (err || !user) {
         const error = new Error("An error occurred.");
@@ -94,7 +93,9 @@ exports.login = async (req, res, next) => {
         if (error) return next(error);
 
         const body = { _id: user._id, username: user.username };
-        const token = jwt.sign({ user: body }, process.env.jwt_key);
+        const token = jwt.sign({ user: body }, process.env.jwt_key, {
+          expiresIn: "1h",
+        });
 
         return res.json({ token });
       });
