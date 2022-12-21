@@ -7,6 +7,9 @@ const post_controller = require("../controllers/postController");
 const comment_controller = require("../controllers/commentController");
 
 // Post Routes //
+router.get("/", (req, res) => {
+  res.send("TBD");
+});
 
 // get posts
 router.get("/posts", post_controller.get_posts);
