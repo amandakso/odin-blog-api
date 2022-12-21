@@ -66,6 +66,10 @@ exports.signup = [
         if (err) {
           return next(err);
         }
+        res.json({
+          message: "New user created",
+          username: req.body.username,
+        });
       });
     });
   },
