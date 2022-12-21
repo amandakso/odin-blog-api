@@ -40,6 +40,22 @@ passport.use(
   })
 );
 
+passport.use(
+  new JWTstrategy(
+    {
+      secretOrKey: process.env.jwt_key,
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    },
+    async (token, done) => {
+      try {
+        return done(null, token.user);
+      } catch (error) {
+        done(error);
+      }
+    }
+  )
+);
+
 var app = express();
 
 // Set up mongoose connection

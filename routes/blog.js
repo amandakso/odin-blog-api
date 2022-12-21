@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const passport = require("passport");
+
 // Require controller modules.
 const user_controller = require("../controllers/userController");
 const post_controller = require("../controllers/postController");
@@ -18,7 +20,11 @@ router.get("/posts", post_controller.get_posts);
 router.get("/posts/:postid", post_controller.get_a_post);
 
 // create new post
-router.post("/posts", post_controller.create_post);
+router.post(
+  "/posts",
+  passport.authenticate("jwt", { session: false }),
+  post_controller.create_post
+);
 
 // update post
 router.put("/posts/:postid", post_controller.update_post);
