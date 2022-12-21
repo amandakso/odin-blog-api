@@ -4,16 +4,47 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const JWTstrategy = require("passport-jwt").Strategy;
+const ExtractJWT = require("passport-jwt").ExtractJwt;
+
+const bcrypt = require("bcryptjs");
+const User = require("./models/user");
+
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var blogRouter = require("./routes/blog");
 
 require("dotenv").config();
 
+// Passport strategies
+passport.use(
+  "login",
+  new LocalStrategy((username, password, done) => {
+    User.findOne({ username: username }, (err, user) => {
+      if (err) {
+        return done(err);
+      }
+      if (!user) {
+        return done(null, false, { message: "User not found" });
+      }
+      bcrypt.compare(password, user.password, (err, res) => {
+        if (res) {
+          return done(null, user);
+        } else {
+          return done(null, false, { message: "Incorrect password" });
+        }
+      });
+    });
+  })
+);
+
 var app = express();
 
 // Set up mongoose connection
 const mongoose = require("mongoose");
+const user = require("./models/user");
 const mongoDB = process.env.MONGODB_URL;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
