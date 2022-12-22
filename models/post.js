@@ -6,7 +6,7 @@ const PostSchema = new Schema({
   title: { type: String, maxLength: 500 },
   content: { type: String, required: true, maxLength: 5000 },
   timestamp: { type: Date, default: Date.now },
-  published: { type: Boolean, required: true },
+  published: { type: Boolean, required: true, default: false },
 });
 
 // Export model
