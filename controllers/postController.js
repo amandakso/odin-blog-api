@@ -39,12 +39,7 @@ exports.create_post = [
 
     // Extract bearer token
     const bearerHeader = req.headers.authorization;
-    // Check if bearer is undefined
-    if (typeof bearerHeader !== "undefined") {
-      // Split at the space
-      const bearer = bearerHeader.split(" ");
-      bearerToken = bearer[1];
-    }
+    bearerToken = extractBearerToken(bearerHeader);
 
     // Verify Token
     jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
@@ -77,3 +72,14 @@ exports.update_post = (req, res) => {
 exports.delete_post = (req, res) => {
   return res.send("TBD delete post");
 };
+
+function extractBearerToken(bearerHeader) {
+  if (typeof bearerHeader !== "undefined") {
+    // Split at the space
+    const bearer = bearerHeader.split(" ");
+    bearerToken = bearer[1];
+    return bearerToken;
+  } else {
+    return bearerHeader;
+  }
+}
