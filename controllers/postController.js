@@ -34,6 +34,7 @@ exports.create_post = [
         content: req.body.content,
         errors: errors.array(),
       });
+      return;
     }
     let bearerToken = "";
 
