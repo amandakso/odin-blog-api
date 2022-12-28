@@ -5,8 +5,16 @@ const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
 
-exports.get_posts = (req, res) => {
-  return res.send("TBD get all posts");
+exports.get_posts = (req, res, next) => {
+  Post.find({ published: true }, "author title content publish_date")
+    .sort({ publish_date: -1 })
+    .populate("author", "username")
+    .exec(function (err, list_posts) {
+      if (err) {
+        return next(err);
+      }
+      res.json(list_posts);
+    });
 };
 exports.get_a_post = (req, res) => {
   return res.send("TBD get one post");
