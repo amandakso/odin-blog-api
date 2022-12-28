@@ -44,7 +44,11 @@ router.get(
 );
 
 // create new comment
-router.post("/posts/:postid/comments", comment_controller.create_comment);
+router.post(
+  "/posts/:postid/comments",
+  passport.authenticate("jwt", { session: false }),
+  comment_controller.create_comment
+);
 
 // update comment
 router.put(
