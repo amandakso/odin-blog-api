@@ -2,6 +2,7 @@ const Post = require("../models/post");
 
 const { body, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 require("dotenv").config();
 
@@ -16,8 +17,20 @@ exports.get_posts = (req, res, next) => {
       res.json(list_posts);
     });
 };
-exports.get_a_post = (req, res) => {
-  return res.send("TBD get one post");
+exports.get_a_post = (req, res, next) => {
+  Post.findById(req.params.postid)
+    .select("author title content publish_date")
+    .populate("author", "username")
+    .exec(function (err, list_post) {
+      if (err) {
+        return next(err);
+      }
+      if (!list_post) {
+        res.json({ msg: "Post not found" });
+      } else {
+        res.json(list_post);
+      }
+    });
 };
 exports.create_post = [
   // Validate and sanitize fields
