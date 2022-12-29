@@ -18,8 +18,20 @@ exports.get_comments = (req, res, next) => {
       res.json(list_comments);
     });
 };
-exports.get_a_comment = (req, res) => {
-  return res.render("TBD get one comment");
+exports.get_a_comment = (req, res, next) => {
+  Comment.findById(req.params.commentid)
+    .select("user content timestamp")
+    .populate("user", "username")
+    .exec(function (err, list_comment) {
+      if (err) {
+        return next(err);
+      }
+      if (!list_comment) {
+        res.json({ msg: "Comment not found" });
+      } else {
+        res.json(list_comment);
+      }
+    });
 };
 exports.create_comment = [
   // Validate and sanitize comment field
