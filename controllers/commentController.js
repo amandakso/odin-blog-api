@@ -7,8 +7,16 @@ const mongoose = require("mongoose");
 
 require("dotenv").config();
 
-exports.get_comments = (req, res) => {
-  return res.render("TBD get all comments of a post");
+exports.get_comments = (req, res, next) => {
+  Comment.find({ post: req.params.postid }, "user content timestamp")
+    .sort({ timestamp: -1 })
+    .populate("user", "username")
+    .exec(function (err, list_comments) {
+      if (err) {
+        return next(err);
+      }
+      res.json(list_comments);
+    });
 };
 exports.get_a_comment = (req, res) => {
   return res.render("TBD get one comment");
