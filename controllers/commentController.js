@@ -114,8 +114,47 @@ exports.create_comment = [
 exports.update_comment = (req, res) => {
   return res.send("TBD update comment");
 };
-exports.delete_comment = (req, res) => {
-  return res.send("TBD delete comment");
+exports.delete_comment = (req, res, next) => {
+  Comment.findById(req.params.commentid)
+    .populate("post", "author")
+    .select("user")
+    .exec((err, result) => {
+      if (err) {
+        return next(err);
+      }
+      if (!result) {
+        res.json({
+          msg: "Comment not found",
+        });
+      } else {
+        let bearerToken = "";
+
+        // Extract bearer token
+        const bearerHeader = req.headers.authorization;
+        bearerToken = extractBearerToken(bearerHeader);
+        // Verify Token
+        jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
+          if (err) {
+            res.json({ msg: "Error" });
+          } else if (
+            authData.user._id !== result.user.toString() &&
+            authData.user._id !== result.post.author.toString()
+            // checks if post author or comment author are trying to delete comment
+          ) {
+            res.json({ msg: "Not authorized to delete comment" });
+          } else {
+            Comment.findByIdAndRemove(req.params.commentid, (err) => {
+              if (err) {
+                return next(err);
+              }
+              res.json({
+                msg: "Comment deleted",
+              });
+            });
+          }
+        });
+      }
+    });
 };
 
 function extractBearerToken(bearerHeader) {
