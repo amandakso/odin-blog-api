@@ -6,6 +6,7 @@ const CommentSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   content: { type: String, required: true, maxLength: 2500 },
   timestamp: { type: Date, default: Date.now },
+  updated: { type: Date },
 });
 
 // Export model

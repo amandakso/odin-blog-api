@@ -89,7 +89,6 @@ exports.create_comment = [
           if (err) {
             res.json({ msg: "Error" });
           } else {
-            // Check that post exists
             // Create new comment object
             const comment = new Comment({
               post: req.params.postid,
@@ -111,9 +110,74 @@ exports.create_comment = [
     });
   },
 ];
-exports.update_comment = (req, res) => {
-  return res.send("TBD update comment");
-};
+exports.update_comment = [
+  // Validate and sanitize fields.
+  body("comment", "Comment not within character limit.")
+    .trim()
+    .isLength({ min: 1, max: 2500 })
+    .escape(),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // Errors exist. send json with error messages
+      res.json({
+        comment: req.body.comment,
+        errors: errors.array(),
+      });
+      return;
+    }
+
+    // Check that comment exists
+    Comment.findById(req.params.commentid)
+      .populate("post", "author")
+      .select("user")
+      .exec((err, result) => {
+        if (err) {
+          return next(err);
+        }
+        if (!result) {
+          res.json({
+            msg: "Comment not found",
+          });
+        } else {
+          let bearerToken = "";
+
+          // Extract bearer token
+          const bearerHeader = req.headers.authorization;
+          bearerToken = extractBearerToken(bearerHeader);
+          // Verify Token
+          jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
+            if (err) {
+              res.json({ msg: "Error" });
+            } else if (
+              authData.user._id !== result.user.toString()
+              // checks if comment author is trying to delete comment
+            ) {
+              res.json({ msg: "Not authorized to update comment" });
+            } else {
+              // Update comment
+              Comment.findByIdAndUpdate(
+                req.params.commentid,
+                { content: req.body.comment, updated: Date.now() },
+                (err) => {
+                  if (err) {
+                    return next(err);
+                  }
+                  res.json({
+                    msg: "Comment updated",
+                  });
+                }
+              );
+            }
+          });
+        }
+      });
+  },
+];
 exports.delete_comment = (req, res, next) => {
   Comment.findById(req.params.commentid)
     .populate("post", "author")
