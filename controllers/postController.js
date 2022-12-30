@@ -91,9 +91,77 @@ exports.create_post = [
     });
   },
 ];
-exports.update_post = (req, res) => {
-  return res.send("TBD update post");
-};
+exports.update_post = [
+  // Validate and sanitize fields.
+  body("title", "Title exceeds character limit.")
+    .trim()
+    .isLength({ max: 500 })
+    .escape(),
+  body("content", "Blog post exceeds character limit.")
+    .trim()
+    .isLength({ max: 5000 })
+    .escape(),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // Errors exist. send json with error messages
+      res.json({
+        title: req.body.title,
+        content: req.body.content,
+        errors: errors.array(),
+      });
+      return;
+    }
+    // Check that post exists
+    Post.findById(req.params.postid)
+      .select("author")
+      .exec((err, result) => {
+        if (err) {
+          return next(err);
+        }
+        if (!result) {
+          res.json({
+            msg: "Post not found",
+          });
+        } else {
+          let bearerToken = "";
+
+          // Extract bearer token
+          const bearerHeader = req.headers.authorization;
+          bearerToken = extractBearerToken(bearerHeader);
+          // Verify Token
+          jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
+            if (err) {
+              res.json({ msg: "Error" });
+            } else if (authData.user._id !== result.author.toString()) {
+              res.json({ msg: "Not authorized to update post" });
+            } else {
+              Post.findByIdAndUpdate(
+                req.params.postid,
+                {
+                  title: req.body.title,
+                  content: req.body.content,
+                  updated: Date.now(),
+                },
+                (err) => {
+                  if (err) {
+                    return next(err);
+                  }
+                  res.json({
+                    msg: "Post updated",
+                  });
+                }
+              );
+            }
+          });
+        }
+      });
+  },
+];
 exports.delete_post = (req, res, next) => {
   async.parallel(
     {
