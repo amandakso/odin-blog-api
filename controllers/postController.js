@@ -1,8 +1,11 @@
 const Post = require("../models/post");
+const Comment = require("../models/comment");
 
 const { body, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+
+const async = require("async");
 
 require("dotenv").config();
 
@@ -91,8 +94,59 @@ exports.create_post = [
 exports.update_post = (req, res) => {
   return res.send("TBD update post");
 };
-exports.delete_post = (req, res) => {
-  return res.send("TBD delete post");
+exports.delete_post = (req, res, next) => {
+  async.parallel(
+    {
+      post(callback) {
+        Post.findById(req.params.postid).exec(callback);
+      },
+      comments_instances(callback) {
+        Comment.find({ post: req.params.postid }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // check if author of post is trying to delete
+      let bearerToken = "";
+
+      // Extract bearer token
+      const bearerHeader = req.headers.authorization;
+      bearerToken = extractBearerToken(bearerHeader);
+      // Verify Token
+      jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
+        if (err) {
+          res.json({ msg: "Error" });
+        } else if (authData.user._id !== results.post.author.toString()) {
+          res.json({ msg: "Not authorized to delete post" });
+        } else {
+          if (results.comments_instances.length > 0) {
+            // Post has comments. Delete each comment
+            Comment.deleteMany(
+              { post: req.params.postid },
+              function (err, result) {
+                if (err) {
+                  return next(err);
+                } else {
+                  console.log("Comments deleted");
+                }
+              }
+            );
+          }
+          // check user is post author tbd
+          Post.findByIdAndRemove(req.params.postid, (err) => {
+            if (err) {
+              return next(err);
+            }
+            res.json({
+              msg: "Post deleted",
+            });
+          });
+        }
+      });
+    }
+  );
 };
 
 function extractBearerToken(bearerHeader) {
