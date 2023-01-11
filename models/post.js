@@ -8,6 +8,7 @@ const PostSchema = new Schema({
   timestamp: { type: Date, default: Date.now },
   published: { type: Boolean, required: true, default: false },
   publish_date: { type: Date, default: Date.now },
+  updated: { type: Date },
 });
 
 // Export model
