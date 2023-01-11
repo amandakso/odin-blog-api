@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const cors = require("cors");
 
 const passport = require("passport");
 
@@ -14,7 +15,7 @@ router.get("/", (req, res) => {
 });
 
 // get posts
-router.get("/posts", post_controller.get_posts);
+router.get("/posts", cors(), post_controller.get_posts);
 
 // get specific post
 router.get("/posts/:postid", post_controller.get_a_post);
