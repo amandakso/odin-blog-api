@@ -1,5 +1,6 @@
 const Post = require("../models/post");
 const Comment = require("../models/comment");
+const opts = { toJSON: { virtuals: true } };
 
 const { body, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
@@ -10,7 +11,7 @@ const async = require("async");
 require("dotenv").config();
 
 exports.get_posts = (req, res, next) => {
-  Post.find({ published: true }, "author title content publish_date")
+  Post.find({ published: true }, "author title content publish_date updated")
     .sort({ publish_date: -1 })
     .populate("author", "username")
     .exec(function (err, list_posts) {
