@@ -9,6 +9,7 @@ const user_controller = require("../controllers/userController");
 const post_controller = require("../controllers/postController");
 const comment_controller = require("../controllers/commentController");
 
+router.options("*", cors());
 // Post Routes //
 router.get("/", (req, res) => {
   res.send("TBD");
@@ -18,7 +19,7 @@ router.get("/", (req, res) => {
 router.get("/posts", cors(), post_controller.get_posts);
 
 // get specific post
-router.get("/posts/:postid", post_controller.get_a_post);
+router.get("/posts/:postid", cors(), post_controller.get_a_post);
 
 // create new post
 router.post(
@@ -36,7 +37,7 @@ router.delete("/posts/:postid", post_controller.delete_post);
 //Comment Routes //
 
 // get comments
-router.get("/posts/:postid/comments", comment_controller.get_comments);
+router.get("/posts/:postid/comments", cors(), comment_controller.get_comments);
 
 // get specific comment
 router.get(
@@ -69,7 +70,7 @@ router.delete(
 router.post("/sign-up", user_controller.signup);
 
 // Login user
-router.post("/login", user_controller.login);
+router.post("/login", cors(), user_controller.login);
 
 // Logout user
 router.put("/logout", user_controller.logout);

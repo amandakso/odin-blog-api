@@ -80,13 +80,13 @@ exports.signup = [
 ];
 
 exports.login = async (req, res, next) => {
-  //Get user
+  console.log(req.body);
   passport.authenticate("login", async (err, user) => {
     try {
       if (err || !user) {
         const error = new Error("An error occurred.");
 
-        return next(error);
+        return res.json({ error: error.message });
       }
 
       req.login(user, { session: false }, async (error) => {
