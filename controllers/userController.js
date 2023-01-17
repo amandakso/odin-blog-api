@@ -80,9 +80,12 @@ exports.signup = [
 ];
 
 exports.login = async (req, res, next) => {
-  console.log(req.body);
-  passport.authenticate("login", async (err, user) => {
+  passport.authenticate("login", async (err, user, message) => {
+    console.log(message);
     try {
+      if (message) {
+        return res.json(message);
+      }
       if (err || !user) {
         const error = new Error("An error occurred.");
 

@@ -22,8 +22,6 @@ require("dotenv").config();
 passport.use(
   "login",
   new LocalStrategy((username, password, done) => {
-    console.log(username);
-    console.log(password);
     User.findOne({ username: username }, (err, user) => {
       if (err) {
         return done(err);
