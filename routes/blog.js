@@ -73,6 +73,6 @@ router.post("/sign-up", user_controller.signup);
 router.post("/login", cors(), user_controller.login);
 
 // Logout user
-router.put("/logout", user_controller.logout);
+router.put("/logout", cors(), user_controller.logout);
 
 module.exports = router;

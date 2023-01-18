@@ -100,7 +100,7 @@ exports.login = async (req, res, next) => {
           expiresIn: "1h",
         });
 
-        return res.json({ token });
+        return res.json({ token, username: user.username });
       });
     } catch (error) {
       return next(error);
