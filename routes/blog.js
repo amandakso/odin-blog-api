@@ -49,6 +49,7 @@ router.get(
 router.post(
   "/posts/:postid/comments",
   passport.authenticate("jwt", { session: false }),
+  cors(),
   comment_controller.create_comment
 );
 
