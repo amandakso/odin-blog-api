@@ -59,7 +59,7 @@ exports.signup = [
     // Create a new user
     bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
       if (err) {
-        return next(err);
+        return res.json({ error: err });
       }
       let author = req.body.author ? true : false;
       const user = new User({
@@ -68,11 +68,10 @@ exports.signup = [
         author: author,
       }).save((err) => {
         if (err) {
-          return next(err);
+          return res.json({ error: err });
         }
         res.json({
-          message: "New user created",
-          username: req.body.username,
+          message: `New user ${req.body.username} created`,
         });
       });
     });

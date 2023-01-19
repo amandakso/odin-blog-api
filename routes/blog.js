@@ -67,7 +67,7 @@ router.delete(
 // User Routes //
 
 // Create new user
-router.post("/sign-up", user_controller.signup);
+router.post("/sign-up", cors(), user_controller.signup);
 
 // Login user
 router.post("/login", cors(), user_controller.login);
