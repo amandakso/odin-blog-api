@@ -48,8 +48,8 @@ router.get(
 // create new comment
 router.post(
   "/posts/:postid/comments",
-  passport.authenticate("jwt", { session: false }),
   cors(),
+  passport.authenticate("jwt", { session: false }),
   comment_controller.create_comment
 );
 
@@ -62,6 +62,7 @@ router.put(
 // delete comment
 router.delete(
   "/posts/:postid/comments/:commentid",
+  cors(),
   comment_controller.delete_comment
 );
 

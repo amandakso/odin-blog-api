@@ -69,14 +69,14 @@ exports.create_comment = [
         }
         return status;
       } catch (err) {
-        return next(err);
+        return res.json({ error: err });
       }
     };
     let checkPostStatus = checkPost(req.params.postid);
     checkPostStatus.then(function (result) {
       if (!result) {
         res.json({
-          msg: "Post not found",
+          message: "Post not found",
         });
       } else {
         let bearerToken = "";
@@ -87,7 +87,7 @@ exports.create_comment = [
         // Verify Token
         jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
           if (err) {
-            res.json({ msg: "Error" });
+            res.json({ error: "Error" });
           } else {
             // Create new comment object
             const comment = new Comment({
@@ -96,7 +96,7 @@ exports.create_comment = [
               content: req.body.comment,
             }).save((err) => {
               if (err) {
-                return next(err);
+                return res.json({ error: err });
               }
               res.json({
                 message: "New comment created",
