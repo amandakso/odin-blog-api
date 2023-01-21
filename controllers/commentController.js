@@ -188,7 +188,7 @@ exports.delete_comment = (req, res, next) => {
       }
       if (!result) {
         res.json({
-          msg: "Comment not found",
+          error: "Comment not found",
         });
       } else {
         let bearerToken = "";
@@ -199,20 +199,20 @@ exports.delete_comment = (req, res, next) => {
         // Verify Token
         jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
           if (err) {
-            res.json({ msg: "Error" });
+            res.json({ error: "Error" });
           } else if (
             authData.user._id !== result.user.toString() &&
             authData.user._id !== result.post.author.toString()
             // checks if post author or comment author are trying to delete comment
           ) {
-            res.json({ msg: "Not authorized to delete comment" });
+            res.json({ error: "Not authorized to delete comment" });
           } else {
             Comment.findByIdAndRemove(req.params.commentid, (err) => {
               if (err) {
                 return next(err);
               }
               res.json({
-                msg: "Comment deleted",
+                message: "Comment deleted",
               });
             });
           }
