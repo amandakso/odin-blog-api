@@ -152,7 +152,7 @@ exports.update_comment = [
           // Verify Token
           jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
             if (err) {
-              res.json({ error: "Error" });
+              res.json({ error: "Unable to validate user" });
             } else if (
               authData.user._id !== result.user.toString()
               // checks if comment author is trying to delete comment
@@ -165,7 +165,7 @@ exports.update_comment = [
                 { content: req.body.comment, updated: Date.now() },
                 (err) => {
                   if (err) {
-                    return res.json({ error: err });
+                    return res.json({ error: err.message });
                   }
                   res.json({
                     message: "Comment updated",
