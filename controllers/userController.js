@@ -92,7 +92,7 @@ exports.login = async (req, res, next) => {
       }
 
       req.login(user, { session: false }, async (error) => {
-        if (error) return next(error);
+        if (error) return res.json({ error: error.message });
 
         const body = { _id: user._id, username: user.username };
         const token = jwt.sign({ user: body }, process.env.jwt_key, {
@@ -102,7 +102,7 @@ exports.login = async (req, res, next) => {
         return res.json({ token, username: user.username });
       });
     } catch (error) {
-      return next(error);
+      return res.jsson({ error: error.message });
     }
   })(req, res, next);
 };
