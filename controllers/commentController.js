@@ -137,11 +137,11 @@ exports.update_comment = [
       .select("user")
       .exec((err, result) => {
         if (err) {
-          return next(err);
+          return res.json({ error: err });
         }
         if (!result) {
           res.json({
-            msg: "Comment not found",
+            error: "Comment not found",
           });
         } else {
           let bearerToken = "";
@@ -152,12 +152,12 @@ exports.update_comment = [
           // Verify Token
           jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
             if (err) {
-              res.json({ msg: "Error" });
+              res.json({ error: "Error" });
             } else if (
               authData.user._id !== result.user.toString()
               // checks if comment author is trying to delete comment
             ) {
-              res.json({ msg: "Not authorized to update comment" });
+              res.json({ error: "Not authorized to update comment" });
             } else {
               // Update comment
               Comment.findByIdAndUpdate(
@@ -165,10 +165,10 @@ exports.update_comment = [
                 { content: req.body.comment, updated: Date.now() },
                 (err) => {
                   if (err) {
-                    return next(err);
+                    return res.json({ error: err });
                   }
                   res.json({
-                    msg: "Comment updated",
+                    message: "Comment updated",
                   });
                 }
               );

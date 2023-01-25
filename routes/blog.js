@@ -56,6 +56,7 @@ router.post(
 // update comment
 router.put(
   "/posts/:postid/comments/:commentid",
+  cors(),
   comment_controller.update_comment
 );
 
