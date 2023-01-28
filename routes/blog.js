@@ -18,6 +18,8 @@ router.get("/", (req, res) => {
 // get posts
 router.get("/posts", cors(), post_controller.get_posts);
 
+// get all posts by author
+router.get("/posts/author", cors(), post_controller.get_posts_by_author);
 // get specific post
 router.get("/posts/:postid", cors(), post_controller.get_a_post);
 

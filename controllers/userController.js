@@ -80,7 +80,6 @@ exports.signup = [
 
 exports.login = async (req, res, next) => {
   passport.authenticate("login", async (err, user, message) => {
-    console.log(message);
     try {
       if (message) {
         return res.json(message);

@@ -36,6 +36,36 @@ exports.get_a_post = (req, res, next) => {
       }
     });
 };
+
+exports.get_posts_by_author = (req, res, next) => {
+  let bearerToken = "";
+
+  // Extract bearer token
+  const bearerHeader = req.headers.authorization;
+  bearerToken = extractBearerToken(bearerHeader);
+  console.log(bearerToken);
+
+  // Verify Token
+  jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
+    if (err) {
+      res.json({ msg: "Error" });
+    } else {
+      Post.find(
+        { author: authData.user._id },
+        "author title content publish_date published updated"
+      )
+        .sort({ publish_date: -1 })
+        .populate("author", "username")
+        .exec(function (err, list_posts) {
+          if (err) {
+            return res.json({ error: err });
+          }
+          res.json(list_posts);
+        });
+    }
+  });
+};
+
 exports.create_post = [
   // Validate and sanitize fields
   body("title", "Title exceeds character limit.")
