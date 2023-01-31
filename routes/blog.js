@@ -28,6 +28,7 @@ router.get("/posts/:postid", cors(), post_controller.get_a_post);
 router.post(
   "/posts",
   passport.authenticate("jwt", { session: false }),
+  cors(),
   post_controller.create_post
 );
 
