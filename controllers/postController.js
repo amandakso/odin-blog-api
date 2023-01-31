@@ -99,7 +99,7 @@ exports.create_post = [
     // Verify Token
     jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
       if (err) {
-        res.json({ msg: "Error" });
+        res.json({ error: "Error" });
       } else {
         // Create new post object
         const publish_status = req.body.published == "true" ? true : false;
@@ -110,7 +110,7 @@ exports.create_post = [
           published: publish_status,
         }).save((err) => {
           if (err) {
-            return next(err);
+            return res.json({ error: err.message });
           }
           res.json({
             message: "New post created",
