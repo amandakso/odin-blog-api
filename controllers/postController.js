@@ -43,12 +43,11 @@ exports.get_posts_by_author = (req, res, next) => {
   // Extract bearer token
   const bearerHeader = req.headers.authorization;
   bearerToken = extractBearerToken(bearerHeader);
-  console.log(bearerToken);
 
   // Verify Token
   jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
     if (err) {
-      res.json({ msg: "Error" });
+      res.json({ error: "Error" });
     } else {
       Post.find(
         { author: authData.user._id },
@@ -60,7 +59,7 @@ exports.get_posts_by_author = (req, res, next) => {
           if (err) {
             return res.json({ error: err });
           }
-          res.json(list_posts);
+          res.json({ data: list_posts });
         });
     }
   });
