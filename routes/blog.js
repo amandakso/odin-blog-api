@@ -36,7 +36,7 @@ router.post(
 router.put("/posts/:postid", post_controller.update_post);
 
 // delete post
-router.delete("/posts/:postid", post_controller.delete_post);
+router.delete("/posts/:postid", cors(), post_controller.delete_post);
 
 //Comment Routes //
 

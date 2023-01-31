@@ -225,7 +225,7 @@ exports.delete_post = (req, res, next) => {
               { post: req.params.postid },
               function (err, result) {
                 if (err) {
-                  return next(err);
+                  return res.json({ msg: err.message });
                 } else {
                   console.log("Comments deleted");
                 }
@@ -235,7 +235,7 @@ exports.delete_post = (req, res, next) => {
           // check user is post author tbd
           Post.findByIdAndRemove(req.params.postid, (err) => {
             if (err) {
-              return next(err);
+              return res.json({ msg: err.message });
             }
             res.json({
               msg: "Post deleted",
