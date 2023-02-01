@@ -33,7 +33,7 @@ router.post(
 );
 
 // update post
-router.put("/posts/:postid", post_controller.update_post);
+router.put("/posts/:postid", cors(), post_controller.update_post);
 
 // delete post
 router.delete("/posts/:postid", cors(), post_controller.delete_post);
