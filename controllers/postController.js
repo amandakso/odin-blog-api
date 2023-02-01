@@ -131,6 +131,7 @@ exports.update_post = [
     .trim()
     .isLength({ max: 5000 })
     .escape(),
+  body("published").escape(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -175,6 +176,7 @@ exports.update_post = [
                 {
                   title: req.body.title,
                   content: req.body.content,
+                  published: req.body.published,
                   updated: Date.now(),
                 },
                 (err) => {
