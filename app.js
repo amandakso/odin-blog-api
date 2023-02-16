@@ -63,11 +63,7 @@ const mongoose = require("mongoose");
 const user = require("./models/user");
 const mongoDB = process.env.MONGODB_URL;
 mongoose
-  .connect(
-    mongoDB,
-    { useNewUrlParser: true, useUnifiedTopology: true },
-    () => {}
-  )
+  .connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
   .catch((err) => console.log(err));
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
