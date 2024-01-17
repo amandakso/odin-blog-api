@@ -1,15 +1,9 @@
-bashCopy code
-# Use the official Node.js image as the base image
-FROM node:18
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy the application files into the working directory
-COPY . /app
-
-# Install the application dependencies
-RUN npm install
-
-# Define the entry point for the container
+FROM node:lts-alpine
+ENV NODE_ENV=production
+WORKDIR /usr/src/app
+COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
+RUN npm install --production --silent && mv node_modules ../
+COPY . .
+RUN chown -R node /usr/src/app
+USER node
 CMD ["npm", "start"]
