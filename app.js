@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var cron = require("node-cron");
 
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -17,6 +18,11 @@ var usersRouter = require("./routes/users");
 var blogRouter = require("./routes/blog");
 
 require("dotenv").config();
+
+// self-ping to wake up server
+cron.schedule("*/14 * * * *", () => {
+  console.log("test wake up");
+});
 
 // Passport strategies
 passport.use(
