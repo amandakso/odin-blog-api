@@ -85,7 +85,7 @@ exports.create_comment = [
         const bearerHeader = req.headers.authorization;
         bearerToken = extractBearerToken(bearerHeader);
         // Verify Token
-        jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
+        jwt.verify(bearerToken, process.env.JWT_KEY, (err, authData) => {
           if (err) {
             res.json({ error: "Error" });
           } else {
@@ -150,7 +150,7 @@ exports.update_comment = [
           const bearerHeader = req.headers.authorization;
           bearerToken = extractBearerToken(bearerHeader);
           // Verify Token
-          jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
+          jwt.verify(bearerToken, process.env.JWT_KEY, (err, authData) => {
             if (err) {
               res.json({ error: "Unable to validate user" });
             } else if (
@@ -197,7 +197,7 @@ exports.delete_comment = (req, res, next) => {
         const bearerHeader = req.headers.authorization;
         bearerToken = extractBearerToken(bearerHeader);
         // Verify Token
-        jwt.verify(bearerToken, process.env.jwt_key, (err, authData) => {
+        jwt.verify(bearerToken, process.env.JWT_KEY, (err, authData) => {
           if (err) {
             res.json({ error: "Error" });
           } else if (

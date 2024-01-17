@@ -94,7 +94,7 @@ exports.login = async (req, res, next) => {
         if (error) return res.json({ error: error.message });
 
         const body = { _id: user._id, username: user.username };
-        const token = jwt.sign({ user: body }, process.env.jwt_key, {
+        const token = jwt.sign({ user: body }, process.env.JWT_KEY, {
           expiresIn: "1h",
         });
 
