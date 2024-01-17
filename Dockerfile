@@ -1,11 +1,8 @@
-FROM node:lts-alpine
-ENV NODE_ENV=production
+# Dockerfile
+FROM node:16
 WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install --production --silent && mv node_modules ../
+COPY package*.json ./
+RUN npm install
 COPY . .
-RUN chown -R node /usr/src/app
-# Expose port 4000
-EXPOSE 4000
-USER node
-CMD ["npm", "start"]
+EXPOSE 3000
+CMD node index.js
