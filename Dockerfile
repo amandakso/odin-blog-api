@@ -6,6 +6,7 @@ RUN npm install --production --silent && mv node_modules ../
 COPY . .
 RUN chown -R node /usr/src/app
 # Expose port 8080
-EXPOSE 8080
+ARG port = normalizePort(process.env.PORT || '3000')
+EXPOSE ${port}
 USER node
 CMD ["npm", "start"]
