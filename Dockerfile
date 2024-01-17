@@ -5,8 +5,7 @@ COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 RUN npm install --production --silent && mv node_modules ../
 COPY . .
 RUN chown -R node /usr/src/app
-# Expose port 8080
-ARG PORT= normalizePort(process.env.PORT || '3000')
-EXPOSE ${PORT}
+# Expose port 4000
+EXPOSE 4000
 USER node
 CMD ["npm", "start"]
