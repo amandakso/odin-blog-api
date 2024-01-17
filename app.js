@@ -20,9 +20,12 @@ var blogRouter = require("./routes/blog");
 require("dotenv").config();
 
 // self-ping to wake up server
-cron.schedule("*/14 * * * *", () => {
-  console.log("test wake up");
-});
+/**
+ cron.schedule(14 * * * *", () => {
+   console.log("test wake up");
+ });
+ * 
+ */
 
 // Passport strategies
 passport.use(
