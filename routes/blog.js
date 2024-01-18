@@ -11,7 +11,7 @@ const comment_controller = require("../controllers/commentController");
 
 router.options("*", cors());
 // Post Routes //
-router.get("/", (req, res) => {
+router.get("/", cors(), (req, res) => {
   res.send("TBD");
 });
 
