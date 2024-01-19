@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const job = require("./cronJob");
 
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -17,6 +18,8 @@ var usersRouter = require("./routes/users");
 var blogRouter = require("./routes/blog");
 
 require("dotenv").config();
+
+job.start();
 
 // Passport strategies
 passport.use(
@@ -61,6 +64,7 @@ var app = express();
 // Set up mongoose connection
 const mongoose = require("mongoose");
 const user = require("./models/user");
+const { CronJob } = require("cron");
 const mongoDB = process.env.MONGODB_URL;
 mongoose
   .connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
