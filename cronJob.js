@@ -3,12 +3,11 @@ const https = require("https");
 
 const url = "https://odin-blog-api.onrender.com/blog";
 
-const job = new cron.CronJob("*/14 * * * *", function () {
+const job = new cron.CronJob("*/14 8-19 * * *", function () {
   console.log("Waking up server...");
 
   https
     .get(url, (res) => {
-      console.log(res);
       if (res.statusCode === 200) {
         console.log("Server restarted");
       } else {
