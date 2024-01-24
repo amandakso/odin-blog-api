@@ -7,7 +7,7 @@ const job = new cron.CronJob("*/14 * * * *", function () {
   // server 8 hours ahead of local time.
   const hour = new Date().getHours();
 
-  if (hour > 16 && hour < 4) {
+  if (hour > 16 || hour < 4) {
     // 8am to 8pm PST => server 8 hours ahead
     console.log(`Current hour: ${hour}. Waking up server...`);
     https
