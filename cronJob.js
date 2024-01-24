@@ -8,7 +8,7 @@ const job = new cron.CronJob("*/14 * * * *", function () {
 
   if (hour > 7 && hour < 20) {
     // 8am to 8pm
-    console.log("Waking up server...");
+    console.log(`Current hour: ${hour}. Waking up server...`);
     https
       .get(url, (res) => {
         if (res.statusCode === 200) {
@@ -21,7 +21,7 @@ const job = new cron.CronJob("*/14 * * * *", function () {
         console.error("Error occurred during server wakeup: ", err.message);
       });
   } else {
-    console.log("Inactive hour");
+    console.log(`Current hour: ${hour}. Inactive hour`);
   }
 });
 
