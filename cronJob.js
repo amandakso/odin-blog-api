@@ -21,7 +21,7 @@ const job = new cron.CronJob("*/14 * * * *", function () {
         console.error("Error occurred during server wakeup: ", err.message);
       });
   } else {
-    return;
+    console.log("Inactive hour");
   }
 });
 
