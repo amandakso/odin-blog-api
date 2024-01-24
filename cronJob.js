@@ -4,10 +4,11 @@ const https = require("https");
 const url = "https://odin-blog-api.onrender.com/blog";
 
 const job = new cron.CronJob("*/14 * * * *", function () {
+  // server 8 hours ahead of local time.
   const hour = new Date().getHours();
 
-  if (hour > 7 && hour < 20) {
-    // 8am to 8pm
+  if (hour > 16 && hour < 4) {
+    // 8am to 8pm PST => server 8 hours ahead
     console.log(`Current hour: ${hour}. Waking up server...`);
     https
       .get(url, (res) => {
