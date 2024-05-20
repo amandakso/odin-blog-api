@@ -3,7 +3,6 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-const job = require("./cronJob");
 
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -18,8 +17,6 @@ var usersRouter = require("./routes/users");
 var blogRouter = require("./routes/blog");
 
 require("dotenv").config();
-
-job.start();
 
 // Passport strategies
 passport.use(
